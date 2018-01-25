@@ -14,7 +14,24 @@ typedef struct{
 	int count;
 }json_jsmntok_t;
 
-int json_jsmn_parse(const char *js, jsmntok_t *tokens, int tokens_count, const char **json_jsmntok_keys, json_jsmntok_t *json_jsmntok, int json_jsmntok_count);
+enum jsonstatus
+{
+	JSON_JSMN_EMPTY,
+	JSON_JSMN_VALID,
+	JSON_JSMN_INVALID
+};
+
+typedef struct{
+    const char *key;
+    void *value;
+    int size;
+    jsmntype_t type;
+    enum jsonstatus status;
+}json_object_t;
+
+int json_jsmn_parse(const char *js, jsmntok_t *tokens, int token_count, const char **json_jsmntok_keys, json_jsmntok_t *json_jsmntok, int json_jsmntok_count);
+
+int json_jsmn_parse_object(const char *js, jsmntok_t *tokens, int token_count, json_object_t *objs, int objs_count);
 
 #ifdef __cplusplus
 }
