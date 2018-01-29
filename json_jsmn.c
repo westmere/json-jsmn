@@ -343,6 +343,7 @@ int json_jsmn_parse_object(const char *js, jsmntok_t *tokens, int token_count, j
 				if(objs[k].type == t->type)
 				{
 					objs[k].status = JSON_JSMN_VALID;
+                    n++;
 				}
 				else
 				{
