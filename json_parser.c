@@ -2,6 +2,29 @@
 #include <stdio.h>
 #include <string.h>
 #include "json_parser.h"
+
+void jsmntok_print(const char *js, jsmntok_t *tok)
+{
+	char fmt[8];
+
+	snprintf(fmt, sizeof(fmt), "%%.%ds\n" tok->end - tok->start);
+    printf(fmt, buf, js+tok->start);
+}
+#define object_print(js,key,value)	\
+do{	\
+	jsmntok_print(js, key);	\
+	printf(" : ");	\
+	jsmntok_print(js, value);	\
+	printf("\r\n");	\
+}while(0)
+
+#define array_element_print(js,index,key,value)	\
+do{	\
+	jsmntok_print(js, key);	\
+	printf("[%d] : ", index);	\
+	jsmntok_print(js, value);	\
+	printf("\r\n");	\
+}while(0)
  
 int json_parse(jsmn_parser *parser, const char *js, unsigned int jslen, jsmntok_t *tokens, int tokcount)
 {
