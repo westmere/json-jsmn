@@ -1,7 +1,11 @@
+#include <errno.h>
+#include <stdio.h>
 #include "json_jsmn.h"
  
 int json_parse(jsmn_parser *parser, const char *js, unsigned int jslen, jsmntok_t *tokens, int tokcount)
 {
+    int rc;
+    
     rc = jsmn_parse(parser, js, jslen, tokens, tokcount);
     if (0 > rc)
     {
