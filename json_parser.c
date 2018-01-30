@@ -23,7 +23,7 @@ static void jsmntok_print(const char *js, jsmntok_t *tok)
     int i;
     
     for(i=tok->start;i<tok->end;i++)
-        Log_printf("%c", js+i);
+        Log_printf("%c", js[i]);
 }
 #define object_print(js,key,value)	\
 do{	\
