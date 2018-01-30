@@ -61,7 +61,7 @@ static int jsmn_object_size(jsmntok_t *t, size_t count)
 	}
 }
 
-int json_jsmn_parse(const char *js, jsmntok_t *tokens, int token_count, const char **json_jsmntok_keys, json_jsmntok_t *json_jsmntok, int json_jsmntok_count)
+int json_jsmn_parse(const char *js, jsmntok_t *tokens, unsigned int token_count, const char **json_jsmntok_keys, json_jsmntok_t *json_jsmntok, int json_jsmntok_count)
 {
 	int i, j, k, n;
 
@@ -263,7 +263,7 @@ static int jsmn_get_value(const char *js, jsmntok_t *t, size_t count, void *out,
 	}
 }
 
-int json_jsmn_parse_object(const char *js, jsmntok_t *tokens, int token_count, json_object_t *objs, int objs_count)
+int json_jsmn_parse_object(const char *js, jsmntok_t *tokens, unsigned int token_count, json_object_t *objs, int objs_count)
 {
 	int i, j, k, n;
 	parse_state state = START;

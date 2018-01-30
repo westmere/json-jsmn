@@ -29,9 +29,9 @@ typedef struct{
     enum jsonstatus status;
 }json_object_t;
 
-int json_jsmn_parse(const char *js, jsmntok_t *tokens, int token_count, const char **json_jsmntok_keys, json_jsmntok_t *json_jsmntok, int json_jsmntok_count);
+int json_jsmn_parse(const char *js, jsmntok_t *tokens, unsigned int token_count, const char **json_jsmntok_keys, json_jsmntok_t *json_jsmntok, int json_jsmntok_count);
 
-int json_jsmn_parse_object(const char *js, jsmntok_t *tokens, int token_count, json_object_t *objs, int objs_count);
+int json_jsmn_parse_object(const char *js, jsmntok_t *tokens, unsigned int token_count, json_object_t *objs, int objs_count);
 
 #ifdef __cplusplus
 }
