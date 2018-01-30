@@ -1,6 +1,6 @@
 #include <errno.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 #include "json_parser.h"
  
 int json_parse(jsmn_parser *parser, const char *js, unsigned int jslen, jsmntok_t *tokens, int tokcount)
