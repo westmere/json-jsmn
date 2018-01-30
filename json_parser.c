@@ -9,7 +9,7 @@ static void jsmntok_print(const char *js, jsmntok_t *tok)
 
 	snprintf(fmt, sizeof(fmt), "%c.%ds\n", '%', tok->end - tok->start);
     printf(fmt);
-    printf(fmt, js+tok->start);
+    printf("%.8s", js+tok->start);
 }
 #define object_print(js,key,value)	\
 do{	\
