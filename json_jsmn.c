@@ -105,19 +105,27 @@ int json_jsmn_parse(const char *js, jsmntok_t *tokens, unsigned int token_count,
 
                 state = SKIP;
 
-                // keys list with null at end
-                for (k = 0; json_jsmntok_keys && json_jsmntok_keys[k]; k++)
+                if(json_jsmntok_keys)
                 {
-                    if (0 == json_token_strcmp(js, t, json_jsmntok_keys[k]))
+                    // keys list with null at end
+                    for (k = 0; json_jsmntok_keys[k]; k++)
                     {
-                        if(n < json_jsmntok_count)
+                        if (0 == json_token_strcmp(js, t, json_jsmntok_keys[k]))
                         {
-                        	json_jsmntok[n].key = t;
-                        	state = VALUE;
+                            if(n < json_jsmntok_count)
+                            {
+                                json_jsmntok[n].key = t;
+                                state = VALUE;
 
+                            }
+                            break;
                         }
-                        break;
                     }
+                }
+                else if(n < json_jsmntok_count)
+                {
+                    json_jsmntok[n].key = t;
+                    state = VALUE;
                 }
 
                 if(state == SKIP)
