@@ -15,7 +15,7 @@
 #endif
 
 #ifndef Log_printf
-#define Log_printf(fmt,args...) printf(fmt,##__VA_ARGS__)
+#define Log_printf(fmt,...) printf(fmt,##__VA_ARGS__)
 #endif
 
 void jsmntok_print(const char *js, jsmntok_t *tok)
