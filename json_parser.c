@@ -3,14 +3,7 @@
 #include <string.h>
 #include "json_parser.h"
 
-static void jsmntok_print(const char *js, jsmntok_t *tok)
-{
-	char fmt[10];
-
-	snprintf(fmt, sizeof(fmt), "%c.%ds\n", '%', tok->end - tok->start);
-    printf(fmt);
-    printf("%.8s", js+tok->start);
-}
+#define jsmntok_print(js,tok)
 #define object_print(js,key,value)	\
 do{	\
 	jsmntok_print(js, key);	\
