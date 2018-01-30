@@ -17,7 +17,13 @@
 #define Log_printf(fmt,args...)
 #endif
 
-#define jsmntok_print(js,tok)
+void jsmntok_print(const char *js, jsmntok_t *tok)
+{
+    int i;
+    
+    for(i=tok->start;i<tok->end;i++)
+        Log_printf("%c", js+i);
+}
 #define object_print(js,key,value)	\
 do{	\
 	jsmntok_print(js, key);	\
