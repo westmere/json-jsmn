@@ -3,7 +3,7 @@
 #include <string.h>
 #include "json_parser.h"
 
-void jsmntok_print(const char *js, jsmntok_t *tok)
+static void jsmntok_print(const char *js, jsmntok_t *tok)
 {
 	char fmt[8];
 
