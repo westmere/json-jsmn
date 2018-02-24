@@ -6,11 +6,13 @@
 #ifndef assert
 #define assert(c)
 #endif
-#ifndef Log_info
-#define Log_info(fmt,args...)
-#endif
-#ifndef Log_error
-#define Log_error(fmt,args...)
+
+#ifdef JSON_JSMN_DEBUG
+#define Debug_info    printf
+#define Debug_error   printf
+#else
+#define Debug_info(fmt,args...)
+#define Debug_error(fmt,args...)
 #endif
 
 typedef enum { START, KEY, VALUE, SKIP, STOP } parse_state;
@@ -80,12 +82,12 @@ int json_jsmn_parse(const char *js, jsmntok_t *tokens, unsigned int token_count,
         {
             case START:
                 if (t->type != JSMN_OBJECT)
-                    Log_error("Invalid object(%d): root element must be an object.", t->type);
+                    Debug_error("Invalid object(%d): root element must be an object.", t->type);
 
                 if (!t->size)
                 {
                 	state = START;
-                	Log_error("Empty object.");
+                	Debug_error("Empty object.");
                 }
                 else
                 {
@@ -101,7 +103,7 @@ int json_jsmn_parse(const char *js, jsmntok_t *tokens, unsigned int token_count,
                 j = 1;
 
                 if (t->type != JSMN_STRING)
-                    Log_error("Invalid object(%d): object keys must be strings.", t->type);
+                    Debug_error("Invalid object(%d): object keys must be strings.", t->type);
 
                 state = SKIP;
 
@@ -130,11 +132,11 @@ int json_jsmn_parse(const char *js, jsmntok_t *tokens, unsigned int token_count,
 
                 if(state == SKIP)
 				{
-					Log_info("skip token: %.*s", t->end - t->start, js+t->start);
+					Debug_info("skip token: %.*s", t->end - t->start, js+t->start);
 				}
 				else
 				{
-					Log_info("add token: %.*s", t->end - t->start, js+t->start);
+					Debug_info("add token: %.*s", t->end - t->start, js+t->start);
 				}
 
                 break;
@@ -172,7 +174,7 @@ int json_jsmn_parse(const char *js, jsmntok_t *tokens, unsigned int token_count,
                 break;
 
             default:
-                Log_error("Invalid state %u", state);
+                Debug_error("Invalid state %u", state);
         }
     }
 //    assert_fmt(n <= json_jsmntok_count, "invalid return (%d)", n);
@@ -291,11 +293,11 @@ int json_jsmn_parse_object(const char *js, jsmntok_t *tokens, unsigned int token
 		{
 			case START:
 				if (t->type != JSMN_OBJECT)
-					Log_error("Invalid object(%d): root element must be an object.", t->type);
+					Debug_error("Invalid object(%d): root element must be an object.", t->type);
 
 				if (!t->size){
 					state = START;
-					Log_error("Empty object.");
+					Debug_error("Empty object.");
 				}
 				else{
 					state = KEY;
@@ -310,7 +312,7 @@ int json_jsmn_parse_object(const char *js, jsmntok_t *tokens, unsigned int token
 				j = 1;
 
 				if (t->type != JSMN_STRING)
-					Log_error("Invalid object(%d): object keys must be strings.", t->type);
+					Debug_error("Invalid object(%d): object keys must be strings.", t->type);
 
 				state = SKIP;
 
@@ -326,11 +328,11 @@ int json_jsmn_parse_object(const char *js, jsmntok_t *tokens, unsigned int token
 
 				if(state == SKIP)
 				{
-					Log_info("skip token: %.*s", t->end - t->start, js+t->start);
+					Debug_info("skip token: %.*s", t->end - t->start, js+t->start);
 				}
 				else
 				{
-					Log_info("add token: %.*s", t->end - t->start, js+t->start);
+					Debug_info("add token: %.*s", t->end - t->start, js+t->start);
 				}
 
 				break;
@@ -370,7 +372,7 @@ int json_jsmn_parse_object(const char *js, jsmntok_t *tokens, unsigned int token
 				break;
 
 			default:
-				Log_error("Invalid state %u", state);
+				Debug_error("Invalid state %u", state);
 		}
 	}
 //    assert_fmt(n <= json_jsmntok_count, "invalid return (%d)", n);

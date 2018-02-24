@@ -7,15 +7,10 @@
 #ifndef assert
 #define assert(c)
 #endif
-#ifndef Log_info
-#define Log_info(fmt,args...)
-#endif
-#ifndef Log_error
-#define Log_error(fmt,args...)
-#endif
-
-#ifndef Log_printf
-#define Log_printf(fmt,...) printf(fmt,##__VA_ARGS__)
+#ifdef JSON_JSMN_DEBUG
+#define Debug_printf    printf
+#else
+#define Debug_printf(fmt,args...)
 #endif
 
 static void jsmntok_print(const char *js, jsmntok_t *tok)
@@ -23,22 +18,22 @@ static void jsmntok_print(const char *js, jsmntok_t *tok)
     int i;
     
     for(i=tok->start;i<tok->end;i++)
-        Log_printf("%c", js[i]);
+        Debug_printf("%c", js[i]);
 }
 #define object_print(js,key,value)	\
 do{	\
 	jsmntok_print(js, key);	\
-	Log_printf(" : ");	\
+	Debug_printf(" : ");	\
 	jsmntok_print(js, value);	\
-	Log_printf("\r\n");	\
+	Debug_printf("\r\n");	\
 }while(0)
 
 #define array_element_print(js,index,key,value)	\
 do{	\
 	jsmntok_print(js, key);	\
-	Log_printf("[%d] : ", index);	\
+	Debug_printf("[%d] : ", index);	\
 	jsmntok_print(js, value);	\
-	Log_printf("\r\n");	\
+	Debug_printf("\r\n");	\
 }while(0)
  
 int json_parse(jsmn_parser *parser, const char *js, unsigned int jslen, jsmntok_t *tokens, int tokcount)
@@ -52,18 +47,18 @@ int json_parse(jsmn_parser *parser, const char *js, unsigned int jslen, jsmntok_
         {
             /* Not enough tokens were provided */
         case JSMN_ERROR_NOMEM:
-            Log_printf("jsmn_parse() return JSMN_ERROR_NOMEM\n");
+            Debug_printf("jsmn_parse() return JSMN_ERROR_NOMEM\n");
             return -ENOMEM;
             /* Invalid character inside JSON string */
         case JSMN_ERROR_INVAL:
             /* The string is not a full JSON packet, more bytes expected */
-            Log_printf("jsmn_parse() return JSMN_ERROR_INVAL\n");
+            Debug_printf("jsmn_parse() return JSMN_ERROR_INVAL\n");
             return -EINVAL;
         case JSMN_ERROR_PART:
-            Log_printf("jsmn_parse() return JSMN_ERROR_PART\n");
+            Debug_printf("jsmn_parse() return JSMN_ERROR_PART\n");
             break;
         default:
-            Log_printf("jsmn_parse() return error: %d\n", rc);
+            Debug_printf("jsmn_parse() return error: %d\n", rc);
             return -1;
         }
     }
@@ -89,7 +84,7 @@ int json_parse_object(const char *js, unsigned int jslen, jsmntok_t *tokens, int
 		{
 			if(json_objects[i].type == JSMN_STRING)
 			{
-				Log_printf("jsmn_parse(): %s:%s\r\n", json_objects[i].key, json_objects[i].value);
+				Debug_printf("jsmn_parse(): %s:%s\r\n", json_objects[i].key, json_objects[i].value);
 			}
 			else if(json_objects[i].type == JSMN_PRIMITIVE)
 			{
@@ -97,7 +92,7 @@ int json_parse_object(const char *js, unsigned int jslen, jsmntok_t *tokens, int
 
 				memset(&value, 0, sizeof(value));
 				memcpy(&value, json_objects[i].value, json_objects[i].size > sizeof(value) ? sizeof(value):json_objects[i].size);
-				Log_printf("jsmn_parse(): %s:%d\r\n", json_objects[i].key, value);
+				Debug_printf("jsmn_parse(): %s:%d\r\n", json_objects[i].key, value);
 			}
 		}
 	}
@@ -142,7 +137,7 @@ int json_parse_array(const char *js, unsigned int jslen, jsmntok_t *tokens, int 
 	}
 	else
 	{
-		Log_printf("jsmn_parse(): invalid array: %d\n", rc);
+		Debug_printf("jsmn_parse(): invalid array: %d\n", rc);
 		rc = -1;
 	}
 
