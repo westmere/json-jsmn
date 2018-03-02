@@ -100,7 +100,7 @@ int json_parse_object(const char *js, unsigned int jslen, jsmntok_t *tokens, int
 	return 0;
 }
 
-int json_parse_array(const char *js, unsigned int jslen, jsmntok_t *tokens, int tokcount, const char *name, json_array_element_callback_t callback)
+int json_parse_array(const char *js, unsigned int jslen, jsmntok_t *tokens, int tokcount, const char *name, json_array_element_callback_t callback, void *callback_args)
 {
 	int i,j,rc;
 	jsmn_parser jsmn_parser_object;
@@ -126,7 +126,9 @@ int json_parse_array(const char *js, unsigned int jslen, jsmntok_t *tokens, int 
 				int r = (*callback)(i-1,
 									json_jsmntok.value[i].type,
 									(void *)(js + json_jsmntok.value[i].start),
-									json_jsmntok.value[i].end-json_jsmntok.value[i].start);
+									json_jsmntok.value[i].end-json_jsmntok.value[i].start,
+                                    callback_args
+                                   );
 				if(!r)
 				{
 					rc++;

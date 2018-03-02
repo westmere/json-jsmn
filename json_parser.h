@@ -7,11 +7,11 @@
 extern "C" {
 #endif
     
-typedef int (*json_array_element_callback_t)(int index, jsmntype_t type, void *value, int len);
+typedef int (*json_array_element_callback_t)(int index, jsmntype_t type, void *value, int len, void *callback_args);
 
 int json_parse_object(const char *js, unsigned int jslen, jsmntok_t *tokens, int tokcount, json_object_t *json_objects, int json_object_count);
 
-int json_parse_array(const char *js, unsigned int jslen, jsmntok_t *tokens, int tokcount, const char *name, json_array_element_callback_t callback);
+int json_parse_array(const char *js, unsigned int jslen, jsmntok_t *tokens, int tokcount, const char *name, json_array_element_callback_t callback, void *callback_args);
 
     
 #ifdef __cplusplus
