@@ -134,6 +134,10 @@ int json_parse_array(const char *js, unsigned int jslen, jsmntok_t *tokens, int 
 					rc++;
 				}
 			}
+			else
+            {
+                rc++;
+            }    
 			array_element_print(js, i-1, json_jsmntok.key, &json_jsmntok.value[i]);
 		}
 	}
