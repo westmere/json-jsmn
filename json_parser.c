@@ -117,33 +117,41 @@ int json_parse_array(const char *js, unsigned int jslen, jsmntok_t *tokens, int 
 	json_jsmntok_keys[1] = NULL;
 	rc = json_jsmn_parse(js, tokens, jsmn_parser_object.toknext, json_jsmntok_keys, &json_jsmntok, 1);
 
-	if(rc == 1 && json_jsmntok.count > 1 && json_jsmntok.value->type == JSMN_ARRAY)
-	{
-		for(rc=0,i=1;i<json_jsmntok.count;i++)
-		{
-			if(callback)
-			{
-				int r = (*callback)(i-1,
-									json_jsmntok.value[i].type,
-									(void *)(js + json_jsmntok.value[i].start),
-									json_jsmntok.value[i].end-json_jsmntok.value[i].start,
-                                    callback_args
-                                   );
-				if(!r)
-				{
-					rc++;
-				}
-			}
-			else
+	if(rc == 1 && json_jsmntok.value->type == JSMN_ARRAY)
+    {
+        if(json_jsmntok.count > 1)
+        {
+            for(rc=0,i=1;i<json_jsmntok.count;i++)
             {
-                rc++;
-            }    
-			array_element_print(js, i-1, json_jsmntok.key, &json_jsmntok.value[i]);
-		}
-	}
+                if(callback)
+                {
+                    int r = (*callback)(i-1,
+                                        json_jsmntok.value[i].type,
+                                        (void *)(js + json_jsmntok.value[i].start),
+                                        json_jsmntok.value[i].end-json_jsmntok.value[i].start,
+                                        callback_args
+                                    );
+                    if(!r)
+                    {
+                        rc++;
+                    }
+                }
+                else
+                {
+                    rc++;
+                }    
+                array_element_print(js, i-1, json_jsmntok.key, &json_jsmntok.value[i]);
+            }
+        }
+        else
+        {
+            Debug_printf("jsmn_parse(): array is empty: %d\n", rc);
+            rc = 0;
+        }
+    }
 	else
 	{
-		Debug_printf("jsmn_parse(): invalid array: %d\n", rc);
+		Debug_printf("jsmn_parse(): invalid jsmn array: %d\n", rc);
 		rc = -1;
 	}
 
