@@ -123,6 +123,7 @@ int json_parse_array(const char *js, unsigned int jslen, jsmntok_t *tokens, int 
         {
             for(rc=0,i=1;i<json_jsmntok.count;i++)
             {
+                rc++;
                 if(callback)
                 {
                     int r = (*callback)(i-1,
@@ -131,22 +132,12 @@ int json_parse_array(const char *js, unsigned int jslen, jsmntok_t *tokens, int 
                                         json_jsmntok.value[i].end-json_jsmntok.value[i].start,
                                         callback_args
                                     );
-                    if(!r)
-                    {
-                        // process next
-                        rc++;
-                    }
-                    else
+                    if(r)
                     {
                         // stop request from callback
                         break;
                     }
                 }
-                else
-                {
-                    // process next
-                    rc++;
-                }    
                 array_element_print(js, i-1, json_jsmntok.key, &json_jsmntok.value[i]);
             }
         }
